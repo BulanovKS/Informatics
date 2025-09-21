@@ -19,18 +19,29 @@ def fib_memo(x, cache):
     return cache[x]
 cache = [0]*101
 print(fib_memo(100, cache))
+"""
+def func(x, symb):
+    if x == 1:
+        print(symb*((n-x)//2+1))
+        return
+    # то что до рекурсивного вызова
+    # вызывается на прямом ходу рекурсии
+    print(symb*((n-x)//2+1))
+    func(x-2,symb)
+    # то что после рекурсивного вызова
+    # вызывается на обратном ходу рекурсии
+    print(symb*((n-x)//2+1))
 
-def tr(size, symb):
-    if size == 1: return print(symb)
-    print(symb*(n-x+1))
-    tr(size-2, symb)
-import numpy as np
+n = 7
+s = '.'
+func(n, s)
 
+"""
 arr0 = np.array([1,2,3])
 arr1 = np.array([4,5,6])
 matrix0 = np.stack([arr0, arr1])
 print(matrix0**2)
-"""
+
 import numpy as np
 
 
@@ -41,3 +52,4 @@ def lsm(x,y):
 x = np.array([1,20,3,4])
 y = np.array([2,3,4,19])
 lsm(x,y)
+"""
