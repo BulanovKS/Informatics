@@ -1,0 +1,2 @@
+0 - or result of summation
+40320.0 - or result of multiplication
