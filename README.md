@@ -2,4 +2,4 @@ git add .
 
 git push -m ""
 
-git push Informatics Main
+git push -u Informatics Main
