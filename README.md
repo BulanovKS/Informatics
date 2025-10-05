@@ -2,7 +2,7 @@
 
 D:
 
-cd Informatics
+cd \Informatics
 
 git add .
 
