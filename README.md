@@ -1,3 +1,7 @@
+D:
+
+cd Informatics
+
 git add .
 
 git push -m ""
