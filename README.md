@@ -1,3 +1,5 @@
+/Использую Read.me не по назначению )/
+
 D:
 
 cd Informatics
