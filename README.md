@@ -6,6 +6,6 @@ cd \Informatics
 
 git add .
 
-git push -m ""
+git commit -m ""
 
 git push -u Informatics Main
