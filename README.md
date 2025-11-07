@@ -1,4 +1,4 @@
-/Использую Read.me не по назначению )/
+/Использую Read.me не по назначению/
 
 D:
 
@@ -8,4 +8,4 @@ git add .
 
 git commit -m ""
 
-git push -u Informatics Main
+git pull -u Informatics Main
