@@ -1,6 +1,5 @@
 import tkinter
 from tkinter.filedialog import *
-# раскомментируйте три строки ниже
 from solar_visuals import *
 from solar_physics import *
 from solar_read import *

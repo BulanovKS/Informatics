@@ -97,11 +97,16 @@ def calculate_force(body, space_objects):
     body.Fx = body.Fy = 0
     for obj in space_objects:
         if body == obj:
-            body.Fx = 0.1
-            body.Fy = 0.1
-        r = randint(1, 100) / 100
-        body.Fx += -randint(1, 100) / 100
-        body.Fy += -randint(1, 100) / 100
+            body.Fx = 0
+            body.Fy = 0
+        if obj.type == "planet":
+            if obj.x == 0 or obj.y == 0:
+                continue
+            else:
+                body.Fx += gravitational_constant * obj.m * body.m / obj.x ** 2
+                body.Fy += gravitational_constant * obj.m * body.m / obj.y ** 2
+
+    print(body.Fx, body.Fy)
 
 
 def move_space_object(body, dt):
@@ -112,12 +117,12 @@ def move_space_object(body, dt):
     **body** — тело, которое нужно переместить.
     """
 
-    ax = body.Fx * body.m
-    body.Vx = ax * dt
-    body.x = body.Vx * dt + 0.5 * ax * dt ** 2
-    ay = body.Fy * body.m
+    ax = body.Fx / body.m
+    body.Vx += ax * dt
+    body.x += body.Vx * dt + 0.5 * ax * (dt ** 2)
+    ay = body.Fy / body.m
     body.Vy += ay * dt
-    body.y += body.Vy * dt + 0.5 * ay * dt ** 2
+    body.y += body.Vy * dt + 0.5 * ay * (dt ** 2)
 
 
 def recalculate_space_objects_positions(space_objects, dt):
