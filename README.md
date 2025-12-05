@@ -8,6 +8,6 @@ git add .
 
 git commit -m ""
 
-git pull -u Informatics Main
+git pull Informatics Main
 
-( git push -u Informatics Main )
+git push -u Informatics Main
