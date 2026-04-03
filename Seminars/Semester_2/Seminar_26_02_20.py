@@ -1,4 +1,4 @@
-from Seminar_06_02_26 import _read_graph_as_matrix
+from Seminar_26_02_06 import _read_graph_as_matrix
 
 #TODO: ТОПОЛОГИЧЕСКАЯ СОРТИРОВКА (ТАРЬЯНА), КОСАРАЙЮ, ДЕЙКСТРЫ, БОРУВКА
 
@@ -162,7 +162,7 @@ def Boruvka(vertices, edges): # определяет минимальное ос
 #graph = read_graph_as_edges_list(7)
 #print(Boruvka(5 ,graph))
 
-#TODO: ДЕЙКСТРЫ, ФОРДА-БЕЛЛМАНА, ФЛОЙДА-УОРШЕЛЛА
+#TODO: ДЕЙКСТРЫ, ASTAR (A*), ФОРДА-БЕЛЛМАНА, ФЛОЙДА-УОРШЕЛЛА
 
 def Dijkstra(G,s): # определяет кратчайший путь от вершины s до всех остальных вершин в графе G (веса >= 0)
     # G - граф, представленный списком смежности, индексация с 1
@@ -187,6 +187,116 @@ def Dijkstra(G,s): # определяет кратчайший путь от в�
 
 #graph = read_graph_as_list(5,7, True, True)
 #print(Dijkstra(graph, 1))
+
+import heapq
+
+def dijkstra(graph, start, goal=None): # реализация на кучах
+    dist = {start: 0}
+    parent = {start: None}
+    pq = [(0, start)] # (distance, node)
+    visited = set()
+
+    while pq:
+        cur_dist, v = heapq.heappop(pq)
+
+        if v in visited:
+            continue
+        visited.add(v)
+
+        if goal is not None and v == goal:
+            break
+
+        for to, weight in graph.get(v, []):
+
+            new_dist = cur_dist + weight
+            if to not in dist or new_dist < dist[to]:
+                dist[to] = new_dist
+                parent[to] = v
+                heapq.heappush(pq, (new_dist, to))
+
+    return dist, parent
+
+
+def astar(graph, start, goal, heuristic):
+    g_score = {start: 0}
+    parent = {start: None}
+
+    # (f_score, g_score, node)
+    pq = [(heuristic(start, goal), 0, start)]
+    closed = set()
+
+    while pq:
+        f_cur, g_cur, v = heapq.heappop(pq)
+
+        if v in closed:
+            continue
+        closed.add(v)
+
+        if v == goal:
+            return g_score[v], parent
+
+        for to, weight in graph.get(v, []):
+
+            probe_g = g_score[v] + weight
+
+            if to not in g_score or probe_g < g_score[to]:
+                g_score[to] = probe_g
+                parent[to] = v
+                f_score = probe_g + heuristic(to, goal)
+                heapq.heappush(pq, (f_score, probe_g, to))
+
+    return None, parent
+
+
+def build_grid_graph(n, m, blocked=None):
+    if blocked is None:
+        blocked = set()
+
+    graph = {}
+    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+
+    for x in range(n):
+        for y in range(m):
+            if (x, y) in blocked:
+                continue
+
+            neighbors = []
+            for dx, dy in directions:
+                nx, ny = x + dx, y + dy
+                if 0 <= nx < n and 0 <= ny < m and (nx, ny) not in blocked:
+                    neighbors.append(((nx, ny), 1))
+            graph[(x, y)] = neighbors
+
+    return graph
+
+def manhattan(a, b):
+    return abs(a[0] - b[0]) + abs(a[1] - b[1])
+
+def eucledian(a, b):
+    return (abs(a[0] - b[0])**2 + abs(a[1] - b[1])**2)**0.5
+
+"""
+import time
+graph = build_grid_graph(1000, 1000)
+
+start = (0, 0)
+goal = (400, 500)
+
+# Dijkstra
+t = time.time()
+dist, parent_d = dijkstra(graph, start)
+
+print(time.time() - t)
+print("Dijkstra distance:", dist.get(goal))
+
+
+# A*
+t = time.time()
+astar_dist, parent_a = astar(graph, start, goal, manhattan)
+print(time.time() - t)
+
+print("A* distance:", astar_dist)
+"""
 
 def BelmanFord(G, s): # решается проблема отриц. ребер и циклов, G - список смежности, нумерация с 1
     V = len(G.keys()) + 1

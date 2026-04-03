@@ -63,3 +63,21 @@ def bfs(graph, start): # graph - граф, представленный спис
             if neighbor not in visited:
                 visited.add(neighbor)
                 queue.append(neighbor)
+
+#visited = [False for _ in graph.keys()]
+def dfs(graph, v, visited, stack):
+    visited[v] = True
+    for neighbor in graph[v]:
+        if not visited[neighbor]:
+            dfs(graph, neighbor, visited, stack)
+    stack.append(v)
+
+def DFS(graph, v, prev):
+    stack = [v]
+    while stack:
+        node = stack.pop()
+        if node not in prev:
+            prev.add(node)
+        unvisited_neighbors = set(graph[node]) - prev
+        stack.extend(unvisited_neighbors)
+    return prev
