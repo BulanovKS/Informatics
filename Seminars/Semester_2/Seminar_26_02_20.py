@@ -190,10 +190,11 @@ def Dijkstra(G,s): # определяет кратчайший путь от в�
 
 import heapq
 
-def dijkstra(graph, start, goal=None): # реализация на кучах
-    dist = {start: 0}
-    parent = {start: None}
-    pq = [(0, start)] # (distance, node)
+def dijkstra(G, s, goal=None): # реализация на кучах
+    # G - граф, представленный списком смежности, индексация с 1
+    dist = {s: 0}
+    prev = [None for i in range(len(G.keys()) + 1)]
+    pq = [(0, s)] # (distance, node)
     visited = set()
 
     while pq:
@@ -206,15 +207,16 @@ def dijkstra(graph, start, goal=None): # реализация на кучах
         if goal is not None and v == goal:
             break
 
-        for to, weight in graph.get(v, []):
+        for to, weight in G.get(v, []):
 
             new_dist = cur_dist + weight
             if to not in dist or new_dist < dist[to]:
                 dist[to] = new_dist
-                parent[to] = v
+                prev[to] = v
                 heapq.heappush(pq, (new_dist, to))
 
-    return dist, parent
+    return dist, prev # parent - словарь вершин, по которым можно восстановить кратчайший путь
+    # (для i-ой вершины указана вершина, из которой можно прийти в i-ую вершину за наименьшую цену)
 
 
 def astar(graph, start, goal, heuristic):
@@ -246,7 +248,6 @@ def astar(graph, start, goal, heuristic):
                 heapq.heappush(pq, (f_score, probe_g, to))
 
     return None, parent
-
 
 def build_grid_graph(n, m, blocked=None):
     if blocked is None:

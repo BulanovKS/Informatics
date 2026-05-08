@@ -136,7 +136,7 @@ url = first_step(HEADERS, first_url)
 
 START_ARTICLE = chain(HEADERS, url)
 print(START_ARTICLE)
-GOAL = "Английский язык"
+GOAL = "Латинский язык"
 
 G = build_wikipedia_graph(
     start_title=START_ARTICLE,
