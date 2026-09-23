@@ -299,12 +299,11 @@ print(time.time() - t)
 print("A* distance:", astar_dist)
 """
 
-def BelmanFord(G, s): # решается проблема отриц. ребер и циклов, G - список смежности, нумерация с 1
+def belmanford(G, s): # решается проблема отрицательных ребер и циклов, G - список смежности, нумерация с 1
     V = len(G.keys()) + 1
     dist = [float('inf') for i in range(V)]
     prev = [None for i in range(V)]
     dist[s] = 0
-    x = 0
 
     def relax(v, u, weight, dist, prev):
         if dist[u] > dist[v] + weight:
@@ -324,10 +323,10 @@ def BelmanFord(G, s): # решается проблема отриц. ребер
     return prev
 
 #graph = read_graph_as_list(5,7, True, True)
-#print(BelmanFord(graph, 1))
+#print(belmanford(graph, 1))
 
-def FloydWarshall(graph): # решается проблема отриц. ребер и циклов, graph - матрица смежности, индексация с 1
-    # ПРИ ИСПОЛЬЗОВАНИИ ЗАМЕНИТЬ НУЛИ В МАТРИЦЕ НА INF (очень большими числами)
+def floydwarshall(graph): # решается проблема отрицательных ребер и циклов, graph - матрица смежности, индексация с 1
+    # ПРИ ИСПОЛЬЗОВАНИИ ЗАМЕНИТЬ НУЛИ В МАТРИЦЕ НА INF
     V = len(graph)
     for k in range(V):
         for i in range(V):
@@ -338,7 +337,7 @@ def FloydWarshall(graph): # решается проблема отриц. реб
     return graph
 
 graph = _read_graph_as_matrix(4)
-print(FloydWarshall(graph))
+print(floydwarshall(graph))
 
 """
 100 1 1 100

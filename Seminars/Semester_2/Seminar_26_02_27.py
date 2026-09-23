@@ -24,6 +24,9 @@ def bipartite(graph):
 
     return True, (set1, set2)
 
+graph = {0:[1,2], 1:[0,3], 2:[0,3], 3:[1,2,4], 4:[3]}
+print(bipartite(graph))
+
 def kuhn(graph):
     n = len(graph.keys())
     match = [-1] * n
@@ -44,4 +47,6 @@ def kuhn(graph):
         visited = [False] * n
         if dfs(v):
             max_matching += 1
-    return max_matching
+    return max_matching, match
+
+print(kuhn(graph))
