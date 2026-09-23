@@ -1,6 +1,6 @@
 #include <iostream>
 #include <chrono>
-#include "functions.hpp"
+#include "utility.hpp"
 
 void bubble_sort(int array[], int n){
     for (int i = 0; i < n; i++){
