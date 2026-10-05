@@ -1,4 +1,4 @@
-#include "header.hpp"
+#include "header.h"
 
 void task_small_arrays(){
     std::ofstream f("task_small_arrays.csv", std::ios::out); 

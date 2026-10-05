@@ -1,4 +1,4 @@
-#include "header.hpp"
+#include "header.h"
 
 void task_slow_sorts(){
     std::ofstream f("task_slow_sorts.csv", std::ios::out); 
