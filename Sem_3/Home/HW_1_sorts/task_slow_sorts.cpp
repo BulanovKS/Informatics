@@ -1,6 +1,6 @@
 #include "header.hpp"
 
-int task_slow_sorts(){
+void task_slow_sorts(){
     std::ofstream f("task_slow_sorts.csv", std::ios::out); 
 
     int test_array[100000];

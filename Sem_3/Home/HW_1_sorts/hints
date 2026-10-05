@@ -1,5 +1,0 @@
-cd \Informatics\Sem_3\Home\HW_1_sorts
-
-g++ header.hpp sorts.cpp task_slow_sorts.cpp task_quick_sorts.cpp task_small_arrays.cpp -o program
-
-g++ header.hpp *.cpp -o program
