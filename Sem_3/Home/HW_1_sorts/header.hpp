@@ -6,10 +6,14 @@
 #include <chrono>
 #include <random>
 
+// int main()
+
+int task_slow_sorts();
+int task_quick_sorts();
+int task_small_arrays();
+
 
 // ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
-
-
 // Для сортировок
 
 void swap(int & a, int & b);
@@ -22,13 +26,11 @@ void restore_heap(int list[], int listLength, int root);
 
 int random_uns(int min, int max);
 bool is_sorted(const int array[], int n);
-int array_generator(int test_array[], int N, int flag);
+void array_generator(int test_array[], int N, int flag);
 double test_sort_from_2_param(void (*func)(int array[], int), int test_array[], int N, int flag, int K);
 double test_sort_from_3_param(void (*func)(int array[], int, int), int test_array[], int N, int flag, int K);
 
 // СОРТИРОВКИ
-
-
 // №0 Медленные сортировки
 
 void bubble_sort(int array[], int n);
