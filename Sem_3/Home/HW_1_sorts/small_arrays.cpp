@@ -1,6 +1,6 @@
 #include "header.h"
 
-void task_small_arrays(){
+void small_arrays(){
     std::ofstream f("task_small_arrays.csv", std::ios::out); 
 
     int test_array[1000];

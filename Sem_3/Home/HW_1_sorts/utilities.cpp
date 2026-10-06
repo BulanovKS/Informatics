@@ -100,7 +100,7 @@ void restore_heap(int array[], int n, int root){
 	if (l < n && array[l] > array[maximal]){
 		maximal = l;
     }
-	else if (r < n && array[r] > array[maximal]){
+	if (r < n && array[r] > array[maximal]){
         maximal = r;
     }
 	if (maximal != root){

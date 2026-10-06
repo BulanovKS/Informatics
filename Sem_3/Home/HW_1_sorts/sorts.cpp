@@ -42,9 +42,7 @@ void selection_sort(int array[], int n){
 // №1 Сортировка слиянием (Merge sort)
 
 void merge_sort(int array[], int l, int r){
-
     // Ограничение рекурсии
-
     if (l < r){
         int mid = (l + r) / int(2);
 
@@ -58,9 +56,7 @@ void merge_sort(int array[], int l, int r){
 // №1 Быстрая сортировка (Quick sort)
 
 void quick_sort(int array[], int l, int r){
-
     // Ограничение рекурсии
-
     if (l < r){
         int pivot = find_pivot(array, r, l);
 
@@ -72,15 +68,11 @@ void quick_sort(int array[], int l, int r){
 // №1 Сортировка кучей (Heap sort)
 
 void heap_sort(int array[], int n){
-
     // Max-куча. Построение кучи
-
 	for(int i = n / 2 - 1; i >= 0; i--){
     	restore_heap(array, n, i);
     }
-
 	// Нахождение максимального элемента, перемещение его из корня в конец массива, балансировка кучи
-
 	for(int i = n - 1; i >= 0; i--){
 		swap(array[0], array[i]);
 		restore_heap(array, i, 0);
@@ -89,21 +81,16 @@ void heap_sort(int array[], int n){
 
 // №1 Сортировка Шелла (Shell sort)
 
-void shell_sort(int array[], int n){
-
+void shell_sort (int array[], int n){
     // Уменьшение шага в два раза
-
-	for(int k = n / 2; k > 0; k /= 2){
-
+    for (int s = n / int(2); s > 0; s /= int(2)){
         // Последовательное прохождение по всем парам, отстоящим друг от друга на k и их сортировка
-
-		for (int i = k; i < n; i++){       
-			int j = i;
-
-			while(j >= k && array[j - k] > array[i]){
-				swap(array[j], array[j - k]);
-				j -= k;
-			}
+        for (int i = s; i < n; i++){
+            int j = i;
+            while (j >= s && array[j-s] > array[j]){
+                swap (array[j], array[j-s]);
+                j -= s;
+            }
         }
-	}
+    }
 }

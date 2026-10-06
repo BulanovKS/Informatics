@@ -1,6 +1,6 @@
 #include "header.h"
 
-void task_quick_sorts(){
+void quick_sorts(){
     std::ofstream f("task_quick_sorts.csv", std::ios::out); 
 
     int test_array[100000];

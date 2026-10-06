@@ -8,9 +8,9 @@
 
 // int main()
 
-//void task_slow_sorts();
-void task_quick_sorts();
-void task_small_arrays();
+void slow_sorts();
+void quick_sorts();
+void small_arrays();
 
 
 // ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
