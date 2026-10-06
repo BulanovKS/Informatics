@@ -7,7 +7,7 @@ void quick_sorts(){
     int test_size[10] = {10, 100, 500, 1000, 5000, 10000, 25000, 50000, 75000, 100000};
     int number_of_iterations[10] = {10, 10, 10, 5, 5, 5, 3, 3, 3, 2};
 
-    f << "Type of array" << " | " << "Number" << " | " << "Time of merge_sort" << " | " << "Time of quick_sort" << " | " << "Time of heap_sort" << " | " << "Time of shell_sort" << std::endl;
+    f << "Type of array" << "," << "Number" << "," << "Time of merge_sort" << "," << "Time of quick_sort" << "," << "Time of heap_sort" << "," << "Time of shell_sort" << std::endl;
 
     for (int flag = 0; flag < 3; flag++){
         for (int j = 0; j < 10; j++){
@@ -27,7 +27,7 @@ void quick_sorts(){
             double shell_time = test_sort_from_2_param(shell_sort, test_array, N, flag, K);
             std::cout << N << ": Time shell_sort " << shell_time << std::endl;
 
-            f << flag << " | " << N << " | " << merge_time << " | " << quick_time << " | " << heap_time << " | " << shell_time << std::endl; 
+            f << flag << "," << N << "," << merge_time << "," << quick_time << "," << heap_time << "," << shell_time << std::endl; 
         }
     }
 }

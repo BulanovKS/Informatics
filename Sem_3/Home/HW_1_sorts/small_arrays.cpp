@@ -9,7 +9,7 @@ void small_arrays(){
     double K = 1000;
     int flag = 0;
 
-    f << "Number" << " | " << "Time of bubble_sort" << " | " << "Time of insertion_sort" << " | " << "Time of selection_sort" << " | " << "Time of merge_sort" << " | " << "Time of quick_sort" << " | " << "Time of heap_sort" << " | " << "Time of shell_sort" << std::endl;
+    f << "Number" << "," << "Time of bubble_sort" << "," << "Time of insertion_sort" << "," << "Time of selection_sort" << "," << "Time of merge_sort" << "," << "Time of quick_sort" << "," << "Time of heap_sort" << "," << "Time of shell_sort" << std::endl;
 
         for (int j = 0; j < 20; j++){
 
@@ -36,6 +36,6 @@ void small_arrays(){
             double shell_time = test_sort_from_2_param(shell_sort, test_array, N, flag, K);
             std::cout << N << ": Time shell_sort " << shell_time << std::endl;
 
-            f << N << " | " << bubble_time << " | " << insertion_time << " | " << selection_time << " | " << merge_time << " | " << quick_time << " | " << heap_time << " | " << shell_time << std::endl; 
+            f << N << "," << bubble_time << "," << insertion_time << "," << selection_time << "," << merge_time << "," << quick_time << "," << heap_time << "," << shell_time << std::endl; 
         }
 }
