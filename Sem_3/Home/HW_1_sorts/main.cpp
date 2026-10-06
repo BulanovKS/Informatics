@@ -1,8 +1,10 @@
 #include "header.h"
 
 int main(){
-    //slow_sorts();
+    std::string optim = "_o3";
+    slow_sorts(optim);
     //quick_sorts();
-    small_arrays();
+    //quick_sorts_qs();
+    //small_arrays();
     return 0;
 }

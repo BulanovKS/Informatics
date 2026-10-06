@@ -8,8 +8,9 @@
 
 // int main()
 
-void slow_sorts();
+void slow_sorts(std::string optim);
 void quick_sorts();
+void quick_sorts_qs();
 void small_arrays();
 
 
