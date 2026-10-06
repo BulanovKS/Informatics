@@ -3,6 +3,6 @@
 int main(){
     //slow_sorts();
     //quick_sorts();
-    //small_arrays();
+    small_arrays();
     return 0;
 }

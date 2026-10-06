@@ -1,7 +1,7 @@
 #include "header.h"
 
 void slow_sorts(){
-    std::ofstream f("task_slow_sorts.csv", std::ios::out); 
+    std::ofstream f("slow_sorts.csv", std::ios::out); 
 
     int test_array[100000];
     int test_size[10] = {10, 100, 500, 1000, 5000, 10000, 25000, 50000, 75000, 100000};

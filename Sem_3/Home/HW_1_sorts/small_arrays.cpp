@@ -1,7 +1,7 @@
 #include "header.h"
 
 void small_arrays(){
-    std::ofstream f("task_small_arrays.csv", std::ios::out); 
+    std::ofstream f("small_arrays.csv", std::ios::out); 
 
     int test_array[1000];
     int test_size[20];
