@@ -17,7 +17,7 @@ selection_array_o2 = []
 selection_array_o3 = []
 N_array = []
 
-with open("slow_sorts.csv", "r", encoding="utf_8") as file:
+with open("slow_sorts_o0.csv", "r", encoding="utf_8") as file:
     next(file)
     for line in file:
         stroke = list(map(str, line.split(",")))
