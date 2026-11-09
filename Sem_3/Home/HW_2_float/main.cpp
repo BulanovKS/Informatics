@@ -2,7 +2,7 @@
 
 int main(){
     // TASK 0
-    //int_bin(547738654);
+    //int_bin(3);
 
     // TASK 1
     //float_bin(12345.12345);

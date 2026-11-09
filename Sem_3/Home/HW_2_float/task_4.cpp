@@ -66,7 +66,7 @@ float untitled(int n) {
 
 float pi_error(float num) {
     float pi = 3.141592653589793;
-    float error = num - pi;
+    float error = abs(num - pi);
     return error;
 }
 

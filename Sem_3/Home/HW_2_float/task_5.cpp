@@ -7,6 +7,7 @@ double time() {
 double pi_time(float (func)(int n), int a) {
     float pi = 3.141592653589793;
     float accuracy = pow(10.0, -a);
+    std::cout << accuracy << std::endl;
     float error = 1.0;
     int n = 0;
     double t1 = 0.0;
