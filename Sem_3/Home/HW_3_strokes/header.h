@@ -7,6 +7,10 @@
 #include <fstream>
 #include <iostream>
 
+//  Оптимизация сборки
+
+const char* opt_level = "O0";
+
 // Структуры
 
 struct Block16 { char data[16]; };
@@ -23,7 +27,7 @@ struct Stats {
     unsigned long long checksum = 0;
 };
 
-// Чтение текста из файла (для main)
+// Чтение текста из файла
 
 int text_input(const std::string Name, std::string& text);
 
@@ -85,6 +89,5 @@ char* clone_text(Text text);
 void task_1();
 void task_2();
 void task_3();
-void task_4();
 
 #endif

@@ -1,80 +1,127 @@
 #include "header.h"
 
-void task0() {
-    std::cout << "Task 0: Correctness checks\n";
+// Переменные для работы
 
-    Text empty{nullptr, 0};
-    if (first(empty) != 0) { std::cerr << "FAIL: first empty\n"; return; }
-    Stats s = analyze(empty);
-    if (s.words != 0 || s.checksum != 0) { std::cerr << "FAIL: analyze empty\n"; return; }
+unsigned int  scalar = 12345;
+Block16       b16;
+Block1024     b1024;
+Block16384    b16384;
+Text          text = {nullptr, 0};
+std::string   text_storage[3];
 
-    const char* str = "one two";
-    Text t{str, 7};
-    if (first(t) != 'o') { std::cerr << "FAIL: first one two\n"; return; }
-    s = analyze(t);
-    if (s.words != 2 || s.checksum != 700) { std::cerr << "FAIL: analyze one two\n"; return; }
+const char* mode_names[3] = {"value", "ref", "ptr"};
+const int   perms[6][3] = {{0,1,2},{0,2,1},{1,0,2},{1,2,0},{2,0,1},{2,1,0}};
 
-    Text single{"a", 1};
-    if (first(single) != 'a') { std::cerr << "FAIL: first single\n"; return; }
-    s = analyze(single);
-    if (s.words != 1 || s.checksum != 'a') { std::cerr << "FAIL: analyze single\n"; return; }
+// Функция измерения времени
 
-    Text sep{" \t ", 3};
-    if (first(sep) != ' ') { std::cerr << "FAIL: first sep\n"; return; }
-    s = analyze(sep);
-    if (s.words != 0 || s.checksum != ' ' + '\t' + ' ') { std::cerr << "FAIL: analyze sep\n"; return; }
+double time_measuring(unsigned long long (*fn)(), int repeats, unsigned long long& result) {
+    unsigned long long local = 0;
+    double total_time = 0;
 
-    Text mixed{"one\ttwo three", 13};
-    s = analyze(mixed);
-    if (s.words != 3) { std::cerr << "FAIL: analyze mixed\n"; return; }
-
-    std::string long_str(100000, 'a');
-    Text long_text{long_str.c_str(), long_str.size()};
-    s = analyze(long_text);
-    if (s.words != 1 || s.checksum != 100000ULL * 'a') { std::cerr << "FAIL: analyze long\n"; return; }
-
-    char* copy = clone_text(t);
-    const char* expected = "one two";
-    bool ok = true;
-    for (int i = 0; i <= 7; ++i) if (copy[i] != expected[i]) { ok = false; break; }
-    if (!ok) { std::cerr << "FAIL: clone_text\n"; delete[] copy; return; }
-    delete[] copy;
-
-    char source[] = "one two";
-    Text borrowed{source, 7};
-    Text descriptor_copy = borrowed;
-    char* owned_copy = clone_text(borrowed);
-    source[0] = '0';
-    if (borrowed.data[0] != '0' || descriptor_copy.data[0] != '0') {
-        std::cerr << "FAIL: borrowed sees change\n"; delete[] owned_copy; return;
+    for (int i = 0; i < repeats; ++i) {
+        auto start = std::chrono::steady_clock::now();
+        local += fn();
+        auto end = std::chrono::steady_clock::now();
+        total_time += std::chrono::duration<double>(end - start).count();
     }
-    if (owned_copy[0] != 'o') {
-        std::cerr << "FAIL: owned copy independent\n"; delete[] owned_copy; return;
-    }
-    delete[] owned_copy;
+    result = local;
+    return total_time;
+}
 
-    Block16 b16;
-    fill_block(b16.data, 16, "one two");
-    Stats bs_ref = block16_full_ref(b16);
-    Stats bs_val = block16_full_value(b16);
-    Stats bs_ptr = block16_full_ptr(&b16);
-    if (bs_ref.words != bs_val.words || bs_ref.checksum != bs_val.checksum) {
-        std::cerr << "FAIL: block value vs ref\n"; return;
+// Функция подбора G - числа повторений
+
+int calibrate(unsigned long long (*fa)(), unsigned long long (*fb)(), unsigned long long (*fc)()) {
+    unsigned long long trash = 0;
+    
+    double ta = time_measuring(fa, 1, trash);
+    double tb = time_measuring(fb, 1, trash);
+    double tc = time_measuring(fc, 1, trash);
+
+    double max_t = ta;
+    if (tb > max_t) max_t = tb;
+    if (tc > max_t) max_t = tc;
+    if (max_t <= 0.0) return 1;
+
+    int G = (int)(0.1 / max_t);
+    if (G < 1) G = 1;
+    if (G > 10'000'000) G = 10'000'000;
+    return G;
+}
+
+// Функция записи результатов в csv
+
+void measure_group(std::ofstream& csv, const char* experiment, std::size_t length, const char* work, unsigned long long (*fa)(), unsigned long long (*fb)(), unsigned long long (*fc)(), int base) {
+    int G = calibrate(fa, fb, fc);
+
+    for (int trial = 1; trial <= 5; ++trial) {
+        int id = (trial - 1 + base) % 6;
+
+        for (int i = 0; i < 3; ++i) {
+            int mode = perms[id][i];
+            unsigned long long (*fn)() = (mode == 0) ? fa : (mode == 1) ? fb : fc;
+            unsigned long long result = 0;
+
+            double seconds = time_measuring(fn, G, result);
+
+            csv << experiment << ',' << length << ',' << mode_names[mode] << ','
+                << work << ',' << G << ",1," << opt_level << ','
+                << trial << ',' << seconds << ',' << result << '\n';
+        }
     }
-    if (bs_ref.words != bs_ptr.words || bs_ref.checksum != bs_ptr.checksum) {
-        std::cerr << "FAIL: block ptr vs ref\n"; return;
+}
+
+void task_1() {
+
+    std::ofstream csv("A_" + std::string(opt_level) + ".csv");
+    csv.precision(17);
+    csv << "experiment,length,mode,work,repeats,uses,opt,trial,seconds,result\n";
+
+    // Скаляр
+
+    measure_group(csv, "scalar", 0, "scalar", []{ return (unsigned long long)scalar_value(scalar); }, []{ return (unsigned long long)scalar_ref(scalar); }, []{ return (unsigned long long)scalar_ptr(&scalar); }, 0);
+
+    // Заполнение Block16 / Block1024/ Block16384
+
+    std::string text_in;
+    text_input("text.txt", text_in);
+
+    std::string s; s.reserve(15);
+    for (std::size_t i = 0; i < 15; ++i) { s.push_back((char)(text_in[i])); }
+    fill_block(b16.data, 16, s);
+    
+    std::string s; s.reserve(1023);
+    for (std::size_t i = 0; i < 1023; ++i) { s.push_back((char)(text_in[i])); }
+    fill_block(b1024.data, 1024, s);
+    
+    std::string s; s.reserve(16383);
+    for (std::size_t i = 0; i < 16383; ++i) { s.push_back((char)(text_in[i])); }
+    fill_block(b16384.data, 16384, s);
+
+    // Измерение времени для блоков Block16 / Block1024/ Block16384 (короткий + полный обработчик)
+
+    measure_group(csv, "Block16", 15, "short", []{ return (unsigned long long)block16_first_value(b16); }, []{ return (unsigned long long)block16_first_ref(b16); }, []{ return (unsigned long long)block16_first_ptr(&b16); }, 1);
+    measure_group(csv, "Block16", 15, "full", []{ Stats s = block16_full_value(b16); return (unsigned long long)(s.checksum + s.words); }, []{ Stats s = block16_full_ref(b16);   return (unsigned long long)(s.checksum + s.words); }, []{ Stats s = block16_full_ptr(&b16);  return (unsigned long long)(s.checksum + s.words); }, 2);
+    measure_group(csv, "Block1024", 1023, "short", []{ return (unsigned long long)block1024_first_value(b1024); }, []{ return (unsigned long long)block1024_first_ref(b1024); }, []{ return (unsigned long long)block1024_first_ptr(&b1024); }, 3);
+    measure_group(csv, "Block1024", 1023, "full", []{ Stats s = block1024_full_value(b1024); return (unsigned long long)(s.checksum + s.words); }, []{ Stats s = block1024_full_ref(b1024);   return (unsigned long long)(s.checksum + s.words); }, []{ Stats s = block1024_full_ptr(&b1024);  return (unsigned long long)(s.checksum + s.words); }, 4);
+    measure_group(csv, "Block16384", 16383, "short", []{ return (unsigned long long)block16384_first_value(b16384); }, []{ return (unsigned long long)block16384_first_ref(b16384); }, []{ return (unsigned long long)block16384_first_ptr(&b16384); }, 5);
+    measure_group(csv, "Block16384", 16383, "full", []{ Stats s = block16384_full_value(b16384); return (unsigned long long)(s.checksum + s.words); }, []{ Stats s = block16384_full_ref(b16384);   return (unsigned long long)(s.checksum + s.words); }, []{ Stats s = block16384_full_ptr(&b16384);  return (unsigned long long)(s.checksum + s.words); }, 0);
+
+    // Измерение времени Text для разных длин текста
+
+    std::size_t text_lengths[3] = {15, 1023, 16383};
+    const char* text_names[3] = {"Text15", "Text1023", "Text16383"};
+
+    for (int id = 0; id < 3; ++id) {
+        std::size_t L = text_lengths[id];
+        std::string& s = text_storage[id];
+        s.reserve(L);
+        for (std::size_t i = 0; i < L; ++i) { s.push_back((char)(text_in[i])); }
+        text.data = s.c_str();
+        text.size = L;
+
+        measure_group(csv, text_names[id], L, "short", []{ return (unsigned long long)first_value(text); }, []{ return (unsigned long long)first_ref(text); }, []{ return (unsigned long long)first_ptr(&text); }, id + 1);
+        measure_group(csv, text_names[id], L, "full", []{ Stats s = analyze_value(text); return (unsigned long long)(s.checksum + s.words); }, []{ Stats s = analyze_ref(text);   return (unsigned long long)(s.checksum + s.words); }, []{ Stats s = analyze_ptr(&text);  return (unsigned long long)(s.checksum + s.words); }, id + 2);
     }
 
-    Text text_sample{"one two", 7};
-    Stats ts_val = analyze_value(text_sample);
-    Stats ts_ref = analyze_ref(text_sample);
-    Stats ts_ptr = analyze_ptr(&text_sample);
-    if (ts_val.words != ts_ref.words || ts_val.checksum != ts_ref.checksum) {
-        std::cerr << "FAIL: text value vs ref\n"; return;
-    }
-    if (ts_val.words != ts_ptr.words || ts_val.checksum != ts_ptr.checksum) {
-        std::cerr << "FAIL: text ptr vs ref\n"; return;
-    }
-
-    std::cout << "All checks passed.\n";
+    csv.close();
 }
