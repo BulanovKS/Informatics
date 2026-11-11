@@ -9,7 +9,7 @@
 
 //  Оптимизация сборки
 
-const char* opt_level = "O0";
+static const char* opt_level = "O0"; 
 
 // Структуры
 
@@ -89,5 +89,6 @@ char* clone_text(Text text);
 void task_1();
 void task_2();
 void task_3();
+int text_generator();
 
 #endif

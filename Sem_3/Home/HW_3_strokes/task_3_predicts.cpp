@@ -1,8 +1,8 @@
 #include "header.h"
 
-const char* mode_names_3[3] = {"borrow", "copy_each", "copy_once"};
+const char* mode_names_pred_3[3] = {"borrow", "copy_each", "copy_once"};
 
-std::size_t lengths_3[3] = {15, 1023, 16383};
+std::size_t lengths_pred_3[3] = {15, 1023, 16383};
 
 void task_3() {
     std::ofstream csv("B_memory_predicts_" + std::string(opt_level) + ".csv");
@@ -12,7 +12,7 @@ void task_3() {
     const int G = 10;
 
     for (int id = 0; id < 3; ++id) {
-        std::size_t L = lengths_3[id];
+        std::size_t L = lengths_pred_3[id];
         
         for (int s = 0; s < 3; ++s) {
             int K = Ks[s];
@@ -30,7 +30,7 @@ void task_3() {
                     pred_peak = L + 1;
                 }
 
-                csv << L << ',' << G << ',' << K << ',' << mode_names_3[m] << ','
+                csv << L << ',' << G << ',' << K << ',' << mode_names_pred_3[m] << ','
                     << pred_calls << ',' << pred_copied << ','
                     << pred_peak << '\n';
             }
