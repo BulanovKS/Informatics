@@ -89,10 +89,12 @@ void task_1() {
     for (std::size_t i = 0; i < 15; ++i) { s.push_back((char)(text_in[i])); }
     fill_block(b16.data, 16, s);
     
+    s.clear(); 
     s.reserve(1023);
     for (std::size_t i = 0; i < 1023; ++i) { s.push_back((char)(text_in[i])); }
     fill_block(b1024.data, 1024, s);
     
+    s.clear(); 
     s.reserve(16383);
     for (std::size_t i = 0; i < 16383; ++i) { s.push_back((char)(text_in[i])); }
     fill_block(b16384.data, 16384, s);

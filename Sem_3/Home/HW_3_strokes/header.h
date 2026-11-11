@@ -9,7 +9,7 @@
 
 //  Оптимизация сборки
 
-static const char* opt_level = "O0"; 
+static const char* opt_level = "O2"; 
 
 // Структуры
 

@@ -5,12 +5,13 @@
 int text_input(const std::string Name, std::string& text) {
     std::ifstream input(Name, std::ios::binary);
     if (!input) return 1;
+
+    text.clear();
     std::string line;
     while (std::getline(input, line)) {
         if (!line.empty() && line.back() == '\r') line.pop_back();
-        for (std::size_t i = 0; i < line.size(); ++i) {
-            text[i] = *line.c_str();
-        }
+        text.append(line);
+
         Stats row = analyze({line.c_str(), line.size()});
         std::cout << row.words << ' ' << row.checksum << '\n';
     }
