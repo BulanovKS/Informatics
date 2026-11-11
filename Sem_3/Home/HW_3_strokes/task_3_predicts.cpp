@@ -4,7 +4,7 @@ const char* mode_names_pred_3[3] = {"borrow", "copy_each", "copy_once"};
 
 std::size_t lengths_pred_3[3] = {15, 1023, 16383};
 
-void task_3() {
+void task_3_predicts() {
     std::ofstream csv("B_memory_predicts_" + std::string(opt_level) + ".csv");
     csv << "length,repeats,uses,mode,allocations,copied_bytes,peak_extra_bytes\n";
 

@@ -89,6 +89,7 @@ char* clone_text(Text text);
 void task_1();
 void task_2();
 void task_3();
+void task_3_predicts();
 int text_generator();
 
 #endif
