@@ -90,3 +90,12 @@ void fill_block(char* data, std::size_t size, const std::string& s) {
     for (std::size_t i = len; i < size - 1; ++i) data[i] = 'a';
     data[size - 1] = '\0';
 }
+
+// Функция копирования Text
+
+char* clone_text(Text text) {
+    char* copy = new char[text.size + 1];
+    for (std::size_t i = 0; i < text.size; ++i) copy[i] = text.data[i];
+    copy[text.size] = '\0';
+    return copy;
+}

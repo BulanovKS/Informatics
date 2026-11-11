@@ -9,8 +9,8 @@ Block16384    b16384;
 Text          text = {nullptr, 0};
 std::string   text_storage[3];
 
-const char* mode_names[3] = {"value", "ref", "ptr"};
-const int   perms[6][3] = {{0,1,2},{0,2,1},{1,0,2},{1,2,0},{2,0,1},{2,1,0}};
+const char* mode_names_1[3] = {"value", "ref", "ptr"};
+const int   perms_1[6][3] = {{0,1,2},{0,2,1},{1,0,2},{1,2,0},{2,0,1},{2,1,0}};
 
 // Функция измерения времени
 
@@ -57,13 +57,13 @@ void measure_group(std::ofstream& csv, const char* experiment, std::size_t lengt
         int id = (trial - 1 + base) % 6;
 
         for (int i = 0; i < 3; ++i) {
-            int mode = perms[id][i];
+            int mode = perms_1[id][i];
             unsigned long long (*fn)() = (mode == 0) ? fa : (mode == 1) ? fb : fc;
             unsigned long long result = 0;
 
             double seconds = time_measuring(fn, G, result);
 
-            csv << experiment << ',' << length << ',' << mode_names[mode] << ','
+            csv << experiment << ',' << length << ',' << mode_names_1[mode] << ','
                 << work << ',' << G << ",1," << opt_level << ','
                 << trial << ',' << seconds << ',' << result << '\n';
         }
@@ -72,7 +72,7 @@ void measure_group(std::ofstream& csv, const char* experiment, std::size_t lengt
 
 void task_1() {
 
-    std::ofstream csv("A_" + std::string(opt_level) + ".csv");
+    std::ofstream csv("A_time_" + std::string(opt_level) + ".csv");
     csv.precision(17);
     csv << "experiment,length,mode,work,repeats,uses,opt,trial,seconds,result\n";
 
@@ -89,11 +89,11 @@ void task_1() {
     for (std::size_t i = 0; i < 15; ++i) { s.push_back((char)(text_in[i])); }
     fill_block(b16.data, 16, s);
     
-    std::string s; s.reserve(1023);
+    s.reserve(1023);
     for (std::size_t i = 0; i < 1023; ++i) { s.push_back((char)(text_in[i])); }
     fill_block(b1024.data, 1024, s);
     
-    std::string s; s.reserve(16383);
+    s.reserve(16383);
     for (std::size_t i = 0; i < 16383; ++i) { s.push_back((char)(text_in[i])); }
     fill_block(b16384.data, 16384, s);
 
@@ -108,19 +108,19 @@ void task_1() {
 
     // Измерение времени Text для разных длин текста
 
-    std::size_t text_lengths[3] = {15, 1023, 16383};
-    const char* text_names[3] = {"Text15", "Text1023", "Text16383"};
+    std::size_t text_lengths_1[3] = {15, 1023, 16383};
+    const char* text_names_1[3] = {"Text15", "Text1023", "Text16383"};
 
     for (int id = 0; id < 3; ++id) {
-        std::size_t L = text_lengths[id];
+        std::size_t L = text_lengths_1[id];
         std::string& s = text_storage[id];
         s.reserve(L);
         for (std::size_t i = 0; i < L; ++i) { s.push_back((char)(text_in[i])); }
         text.data = s.c_str();
         text.size = L;
 
-        measure_group(csv, text_names[id], L, "short", []{ return (unsigned long long)first_value(text); }, []{ return (unsigned long long)first_ref(text); }, []{ return (unsigned long long)first_ptr(&text); }, id + 1);
-        measure_group(csv, text_names[id], L, "full", []{ Stats s = analyze_value(text); return (unsigned long long)(s.checksum + s.words); }, []{ Stats s = analyze_ref(text);   return (unsigned long long)(s.checksum + s.words); }, []{ Stats s = analyze_ptr(&text);  return (unsigned long long)(s.checksum + s.words); }, id + 2);
+        measure_group(csv, text_names_1[id], L, "short", []{ return (unsigned long long)first_value(text); }, []{ return (unsigned long long)first_ref(text); }, []{ return (unsigned long long)first_ptr(&text); }, id + 1);
+        measure_group(csv, text_names_1[id], L, "full", []{ Stats s = analyze_value(text); return (unsigned long long)(s.checksum + s.words); }, []{ Stats s = analyze_ref(text);   return (unsigned long long)(s.checksum + s.words); }, []{ Stats s = analyze_ptr(&text);  return (unsigned long long)(s.checksum + s.words); }, id + 2);
     }
 
     csv.close();
